@@ -1,3 +1,5 @@
+package lox;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -155,6 +157,9 @@ public class Scanner {
                 if (match('/')) {
                     // Since a comment goes until the end of the line, we just continue to advance
                     while (peek() != '\n' && !isAtEnd()) advance();
+                } else if (match('*')) {
+                    // Case for multi line comments `/*` ending with `*/`
+                    blockComment();
                 } else {
                     addToken(TokenType.SLASH);
                 }
@@ -197,6 +202,29 @@ public class Scanner {
 
         if (type == null) type = TokenType.IDENTIFIER; // Case it is an identifier
         addToken(type);
+    }
+
+    /**
+     * This used to scan and ignore block comments
+     * Also support nested comments
+     */
+    private void blockComment() {
+        // keeps track of the nesting depth we are in
+        int nestedLevel = 0;
+
+        // Until we reach the `*/`, we continue to advance
+        while (!(peek() == '*' && peekNext() == '/' && nestedLevel == 0) && !isAtEnd()) {
+            if (peek() == '\n') line++;
+            else if (peek() == '/' && peekNext() == '*') nestedLevel++;
+            else if (peek() == '*' && peekNext() == '/') nestedLevel--;
+            advance();
+        }
+
+        if (isAtEnd()) {
+            Lox.error(line, "Unterminated block comment.");
+            return;
+        }
+        advance();
     }
 
     /**
