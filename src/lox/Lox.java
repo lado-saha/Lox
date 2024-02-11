@@ -1,6 +1,5 @@
 package lox;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,7 +42,7 @@ public class Lox {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
-//        System.out.println(tokens);
+        //        System.out.println(tokens);
         Parser parser = new Parser(tokens);
 
         List<Stmt> statements = parser.parse();
@@ -76,7 +75,7 @@ public class Lox {
      * @throws IOException
      */
     private static void runPrompt() throws IOException {
-        while (true){
+        while (true) {
             InputStreamReader input = new InputStreamReader(System.in);
             BufferedReader reader = new BufferedReader(input);
 

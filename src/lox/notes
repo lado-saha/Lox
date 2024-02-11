@@ -33,3 +33,30 @@ the inner scope, we just clear that environment
 Updated grammar with scopes:
 statement -> exprStmt | printStmt | block;
 block -> "{" declaration* "}"
+
+If statements:
+statements -> exprStmt | ifStmt |  ...;
+ifStmt -> "if" "(" expression ")" statement
+          ( "else" statement )? ;
+
+
+
+expression -> assignment;
+assignment -> IDENTIFIER "=" assignment | logic_or;
+logic_or -> logic_and ("or" logic_and )*;
+logic_and -> equality ("and" equality )*;
+
+
+
+We desugar for loops to while loops
+
+
+
+
+
+
+
+
+
+
+

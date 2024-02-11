@@ -10,22 +10,35 @@
 
 //    print x1;
 
-var a = "global a";
-var b = "global b";
-var c = "global c";
-{
-    var a = "outer a";
-    var b = "outer b";
-    {
-        var a = "inner a";
-        print a;
-        print b;
-        print c;
-    }
-    print a;
-    print b;
-    print c;
+//  var a = "global a";
+//   var b = "global b";
+//   var c = "global c";
+//   {
+//       var a = "outer a";
+//       var b = "outer b";
+//       {
+//           var a = "inner a";
+//           print a;
+//           print b;
+//           print c;
+//       }
+//       print a;
+//       print b;
+//       print c;
+//   }
+//   print a;
+//   print b;
+//       print c;
+
+for(;;){
+for(;;){
+for(;;){
+for(;;){
+print("I love you Jesus");
 }
-print a;
-print b;
-print c;
+print("I love you Jesus");
+}
+print("I love you Jesus");
+}
+print("I love you Jesus");
+}

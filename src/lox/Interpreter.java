@@ -92,6 +92,25 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return expr.value;
     }
 
+    /**
+     * Notice that we do not explicitely return true or false, but since we have a dynamic type language, we will return
+     * the side which is truthy
+     * i.e. print 10 or 45; will return 10 and not true
+     * @param expr
+     * @return
+     */
+    @Override
+    public Object visitLogicalExpr(Expr.Logical expr) {
+        Object left = evaluate(expr.left);
+
+        if (expr.operator.type == TokenType.OR) {
+            if (isTruthy(left)) return left;
+        } else {
+            if (!isTruthy(left)) return left;
+        }
+        return evaluate(expr.right);
+    }
+
     @Override
     public Object visitUnaryExpr(Expr.Unary expr) {
         Object right = evaluate(expr.right);
@@ -209,7 +228,6 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     /**
      * Notice that we first save the current environment(scope), then create se the current environment as the inner
      * one created, then we execute in that scope and at the end, we reload the previous scope
-     *
      */
     private void executeBlock(List<Stmt> statements, Environment environment) {
         Environment previous = this.environment;
@@ -237,18 +255,40 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    /**
+     * just a thin wrapper around the Java implementation of the If control flow
+     *
+     * @param stmt
+     * @return
+     */
+    @Override
+    public Void visitIfStmt(Stmt.If stmt) {
+        if (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.thenBranch);
+        } else if (stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+        return null;
+    }
+
     @Override
     public Void visitPrintStmt(Stmt.Print stmt) {
-//        System.out.println("Done ...");
+        // System.out.println("Done ...");
         Object value = evaluate(stmt.expression);
         System.out.println(stringify(value));
         return null;
     }
 
+    @Override
+    public Void visitWhileStmt(Stmt.While stmt) {
+        while (isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
+        return null;
+    }
+
     /**
      * Interestingly, we handle variable declaration and call
-     *
-     * @return
      */
     @Override
     public Void visitVarStmt(Stmt.Var stmt) {
