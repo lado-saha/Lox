@@ -146,6 +146,8 @@ public class Scanner {
             case '+' -> addToken(TokenType.PLUS);
             case ';' -> addToken(TokenType.SEMICOLON);
             case '*' -> addToken(TokenType.STAR);
+            // ---------- Special ----------------- //
+            case '^' -> addToken(TokenType.EXPONENT);
             // This is due to the existence of !=, <=, >= etc. The `match` checks the value of the next character is `=`
             case '!' -> addToken(match('=') ? TokenType.BANG_EQUAL : TokenType.BANG);
             case '=' -> addToken(match('=') ? TokenType.EQUAL_EQUAL : TokenType.EQUAL);

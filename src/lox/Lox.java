@@ -11,6 +11,8 @@ import java.util.List;
 
 public class Lox {
     static boolean hadError = false;
+    private static Boolean hadRuntimeError = false;
+    private static final Interpreter interpreter = new Interpreter();
 
     /**
      * Basic error handling
@@ -24,6 +26,14 @@ public class Lox {
         hadError = true;
     }
 
+    static void error(Token token, String message) {
+        if (token.type == TokenType.EOF) {
+            report(token.line, " at end ", message);
+        } else {
+            report(token.line, " at '" + token.lexeme + "'", message);
+        }
+    }
+
     /**
      * Actual code runner
      *
@@ -33,16 +43,22 @@ public class Lox {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
+//        System.out.println(tokens);
+        Parser parser = new Parser(tokens);
+
+        List<Stmt> statements = parser.parse();
+
+        // Stop in case of any error
+        if (hadError) return;
+
+        interpreter.interpret(statements);
+
         // For now, we just print the tokens
-        for (Token token : tokens) {
-            System.out.println(token);
-        }
     }
 
     /**
      * Runs the whole file whose path is given as argument when launching the interpreter
      *
-     * @param path
      * @throws IOException
      */
     private static void runFile(String path) throws IOException {
@@ -50,6 +66,8 @@ public class Lox {
         run(new String(bytes, Charset.defaultCharset()));
 
         if (hadError) System.exit(65);
+        if (hadRuntimeError) System.exit(70);
+
     }
 
     /**
@@ -58,11 +76,12 @@ public class Lox {
      * @throws IOException
      */
     private static void runPrompt() throws IOException {
-        InputStreamReader input = new InputStreamReader(System.in);
-        BufferedReader reader = new BufferedReader(input);
+        while (true){
+            InputStreamReader input = new InputStreamReader(System.in);
+            BufferedReader reader = new BufferedReader(input);
 
-        for (; ; ) {
             System.out.print("\n> ");
+
             String line = reader.readLine();
             if (line == null) break;
             run(line);
@@ -79,5 +98,10 @@ public class Lox {
         } else {
             runPrompt();
         }
+    }
+
+    public static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n[line " + error.token.line + "]");
+        hadRuntimeError = true;
     }
 }

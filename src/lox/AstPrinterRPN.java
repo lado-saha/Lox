@@ -2,9 +2,17 @@ package lox;
 
 import java.util.Arrays;
 
+/**
+ * The visitor's pattern was implemented to replace the inavailability of the Sealed class
+ */
 public class AstPrinterRPN implements Expr.Visitor<String> {
     String print(Expr expr) {
         return expr.accept(this);
+    }
+
+    @Override
+    public String visitAssignExpr(Expr.Assign expr) {
+        return null;
     }
 
     @Override
@@ -26,6 +34,11 @@ public class AstPrinterRPN implements Expr.Visitor<String> {
     @Override
     public String visitUnaryExpr(Expr.Unary expr) {
         return "(" + expr.right + " " + expr.operator.lexeme + ")";
+    }
+
+    @Override
+    public String visitVariableExpr(Expr.Variable expr) {
+        return null;
     }
 
     private String parenthesize(String name, Expr... exprs) {

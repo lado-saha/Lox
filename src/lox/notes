@@ -1,0 +1,35 @@
+We want to add the expressions in the syntax tree
+An expression is any set of words which produces an output
+
+program -> expression* EOF;
+expression -> exprStmt | printStmt;
+exprStmt -> expression ";" ;
+printStmt -> "print" expression ";" ;
+
+When we decide to add variable declarations and all the rest;
+program -> declaration* EOF;
+declaration -> varDecl | statement;
+statement -> exprStmt | printStmt;
+
+varDecl -> "var" IDENTIFIER ("=" expression )? ";" ;"
+ -- In order to handle the using variable names (IDENTIFIERS)
+primary -> "true" | "false" | "nil" | NUMBER | STRING | "(" expression ")" | IDENTIFIER;
+
+-- Added the exponent operator '^'
+
+l-values evaluate to something we can store into(variable)
+r-values evaluate to something that produces a value e.g Expressions
+
+expression -> assignment;
+assignment -> IDENTIFIER "=" assignment | equality;
+
+
+The scope of a code is also called the static scope
+
+Shadowing is when the same variable is declared in an inner scope, and so it hides the outer scope
+When we enter an inner scope, We define a fresh environment for each scope. Which will reference all the variables of its outerscope and when we exit
+the inner scope, we just clear that environment
+
+Updated grammar with scopes:
+statement -> exprStmt | printStmt | block;
+block -> "{" declaration* "}"
