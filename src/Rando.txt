@@ -1,44 +1,10 @@
-//   print "Welcome to my first program in lox"; print "";
-//    var a = 1;
-//    var b = -2;
-//    var c = 1;
-
-//    var delta = (b^2 - 4*(a*c))^0.5;
-//    var x1 = (-b + delta) / (2*a);
-//    print x1;
-//    x1 = (-b - delta) / (2*a);
-
-//    print x1;
-
-//  var a = "global a";
-//   var b = "global b";
-//   var c = "global c";
-//   {
-//       var a = "outer a";
-//       var b = "outer b";
-//       {
-//           var a = "inner a";
-//           print a;
-//           print b;
-//           print c;
-//       }
-//       print a;
-//       print b;
-//       print c;
-//   }
-//   print a;
-//   print b;
-//       print c;
-
-for(;;){
-for(;;){
-for(;;){
-for(;;){
-print("I love you Jesus");
-}
-print("I love you Jesus");
-}
-print("I love you Jesus");
-}
-print("I love you Jesus");
+var a = "global";
+return 323;
+{
+    fun showA() {
+        print a;
+    }
+    showA();
+    var a = "block";
+    showA();
 }

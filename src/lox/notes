@@ -47,16 +47,50 @@ logic_or -> logic_and ("or" logic_and )*;
 logic_and -> equality ("and" equality )*;
 
 
-
+The function call in func_name(arg1, ..., argn) is actually the '('
 We desugar for loops to while loops
 
+---------------------------ADDING FUNCTIONS--------------------------------
+
+unary -> ("!" | "-") unary | call;
+call -> primary ( "(" arguments? ")" )*;
+arguments -> expression ("," expression)*;
+
+The arity of a function is the number of parameters it needs
+
+A lisp-1 language is one which stores variables and functions in the same namespace and Lisp-2 is otherwise
+
+-- Consider the function below. The stack trace when we reach the return n; is
+fun count(n) {
+while (n < 100) {
+if (n == 3) return n; // <--
+print n;n = n + 1;
+}
+}
+count(1);
 
 
+Interpreter.visitReturnStmt()
+    -> Interpreter.visitIfStmt()
+    -> Interpreter.executeBlock()
+    -> Interpreter.visitBlockStmt()
+    -> Interpreter.visitWhileStmt()
+    -> Interpreter.executeBlock()
+    -> LoxFunction.call()
+    -> Interpreter.visitCallExpr()
 
 
+Resolving a variable or function means tracking down which declaration  it refers to.
+We have semantic and syntatic analysis. The semantic analyses starts to check our code and say what each bunch of code means. Like, it can find all calls to variables in the entire code and resolve them at once.
+
+--SCOPES AND ENVIRONMENT--
+We reach a problem because our scopes are mutable. When a function inherits a scope at a point in time and the original user of the scope
+updates it, it is not normal for the update to happen to the one who inherited it.
+The function should capture a frozen snapshot of the environment as it existed at the
+moment the function was declared.
 
 
-
+the Resolver and Interpreter match each other so that the Interpreter can have full confidence
 
 
 
