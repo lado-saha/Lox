@@ -2,10 +2,14 @@ package lox;
 
 import java.util.List;
 abstract class Expr {
- interface Visitor<R> {
+ public interface Visitor<R> {
  R visitAssignExpr(Assign expr );
  R visitBinaryExpr(Binary expr );
  R visitCallExpr(Call expr );
+ R visitGetExpr(Get expr );
+ R visitSetExpr(Set expr );
+ R visitSuperExpr(Super expr );
+ R visitThisExpr(This expr );
  R visitGroupingExpr(Grouping expr );
  R visitLiteralExpr(Literal expr );
  R visitLogicalExpr(Logical expr );
@@ -57,6 +61,62 @@ public static class Call extends Expr{
  final Expr callee;
  final Token paren;
  final List<Expr> arguments;
+ }
+public static class Get extends Expr{
+  Get(Expr object, Token name) {
+  this.object = object;
+  this.name = name;
+ }
+
+ @Override
+ <R> R accept(Visitor<R> visitor) {
+  return visitor.visitGetExpr(this);
+ }
+
+ final Expr object;
+ final Token name;
+ }
+public static class Set extends Expr{
+  Set(Expr object, Token name, Expr value) {
+  this.object = object;
+  this.name = name;
+  this.value = value;
+ }
+
+ @Override
+ <R> R accept(Visitor<R> visitor) {
+  return visitor.visitSetExpr(this);
+ }
+
+ final Expr object;
+ final Token name;
+ final Expr value;
+ }
+public static class Super extends Expr{
+  Super(Token keyword, Token method) {
+  this.keyword = keyword;
+  this.method = method;
+ }
+
+ @Override
+ <R> R accept(Visitor<R> visitor) {
+  return visitor.visitSuperExpr(this);
+ }
+
+ final Token keyword;
+ final Token method;
+ }
+public static class This extends Expr{
+  This(Token keyword) {
+  this.keyword = keyword;
+ }
+
+ @Override
+ <R> R accept(Visitor<R> visitor) {
+  return visitor.visitThisExpr(this);
+ }
+
+ final Token keyword;
  }
 public static class Grouping extends Expr{
   Grouping(Expr expression) {
@@ -125,5 +185,5 @@ public static class Variable extends Expr{
  final Token name;
  }
 
- abstract <R> R accept(Visitor<R> visitor);
+  abstract <R> R accept(Visitor<R> visitor);
 }

@@ -2,8 +2,9 @@ package lox;
 
 import java.util.List;
 abstract class Stmt {
- interface Visitor<R> {
+ public interface Visitor<R> {
  R visitBlockStmt(Block stmt );
+ R visitClassStmt(Class stmt );
  R visitExpressionStmt(Expression stmt );
  R visitFunctionStmt(Function stmt );
  R visitIfStmt(If stmt );
@@ -23,6 +24,22 @@ public static class Block extends Stmt{
  }
 
  final List<Stmt> statements;
+ }
+public static class Class extends Stmt{
+  Class(Token name, Expr.Variable superclass, List<Stmt.Function> methods) {
+  this.name = name;
+  this.superclass = superclass;
+  this.methods = methods;
+ }
+
+ @Override
+ <R> R accept(Visitor<R> visitor) {
+  return visitor.visitClassStmt(this);
+ }
+
+ final Token name;
+ final Expr.Variable superclass;
+ final List<Stmt.Function> methods;
  }
 public static class Expression extends Stmt{
   Expression(Expr expression) {
@@ -123,5 +140,5 @@ public static class While extends Stmt{
  final Stmt body;
  }
 
- abstract <R> R accept(Visitor<R> visitor);
+  abstract <R> R accept(Visitor<R> visitor);
 }

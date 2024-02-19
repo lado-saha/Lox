@@ -23,6 +23,10 @@ public class GenerateAst {
                         "Assign: Token name, Expr value",
                         "Binary: Expr left, Token operator, Expr right",
                         "Call: Expr callee, Token paren, List<Expr> arguments",
+                        "Get : Expr object, Token name",
+                        "Set : Expr object, Token name, Expr value",
+                        "Super : Token keyword, Token method",
+                        "This: Token keyword",
                         "Grouping: Expr expression",
                         "Literal: Object value",
                         "Logical: Expr left, Token operator, Expr right",
@@ -35,6 +39,7 @@ public class GenerateAst {
                 "Stmt",
                 Arrays.asList(
                         "Block: List<Stmt> statements",
+                        "Class : Token name, Expr.Variable superclass, List<Stmt.Function> methods",
                         "Expression : Expr expression",
                         "Function: Token name, List<Token> params, List<Stmt> body",
                         "If : Expr condition, Stmt thenBranch, Stmt elseBranch",
@@ -66,14 +71,14 @@ public class GenerateAst {
             defineType(writer, baseName, className, fields);
         }
         writer.println();
-        writer.println(" abstract <R> R accept(Visitor<R> visitor);");
+        writer.println("  abstract <R> R accept(Visitor<R> visitor);");
 
         writer.println("}");
         writer.close();
     }
 
     private static void defineVisitor(PrintWriter writer, String baseName, List<String> types) {
-        writer.println(" interface Visitor<R> {");
+        writer.println(" public interface Visitor<R> {");
 
         for (String type : types) {
             String typeName = type.split(":")[0].trim();

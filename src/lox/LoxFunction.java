@@ -6,10 +6,13 @@ import java.util.List;
 /* Heart of the function and method creation and execution in the lox language */
 public class LoxFunction implements LoxCallable {
     private final Stmt.Function declaration;
+    private final boolean isInitializer;
+
     // This is the scope of the current function
     private final Environment closure;
 
-    LoxFunction(Stmt.Function declaration, Environment closure) {
+    LoxFunction(Stmt.Function declaration, Environment closure, Boolean isInitializer) {
+        this.isInitializer = isInitializer;
         this.closure = closure;
         this.declaration = declaration;
     }
@@ -49,9 +52,19 @@ public class LoxFunction implements LoxCallable {
         try {
             interpreter.executeBlock(declaration.body, environment);
         } catch (Return returnValue) {
+            if (isInitializer) return closure.getAt(0, "this");
             return returnValue.value;
         }
+        // If the init is called, we return the instance of the class
+        if (isInitializer) return closure.getAt(0, "this");
 
         return null;
+    }
+
+    // For each class we bind the 'this' -> instance of the class
+    public LoxFunction bind(LoxInstance instance) {
+        Environment environment = new Environment(closure);
+        environment.define("this", instance);
+        return new LoxFunction(declaration, environment, isInitializer);
     }
 }

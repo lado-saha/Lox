@@ -90,7 +90,49 @@ The function should capture a frozen snapshot of the environment as it existed a
 moment the function was declared.
 
 
-the Resolver and Interpreter match each other so that the Interpreter can have full confidence
+The Resolver and Interpreter match each other so that the Interpreter can have full confidence
+
+Object Oriented Programming
+declaration -> classDecl;
+
+classDecl -> "class" IDENTIFIER "{" function* "}" ;
+-- Note that functions in classes are methods. We also donot expl
+
+Like Python and JS, We can add properties on the go. e.g someObject.someProperty, and we can call and modify them directly even out of class scope thereby not fully respecting encapsulation
+
+call -> primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
+assignment → ( call "." )? IDENTIFIER "=" assignment | logic_or ;
+
+We add get and set expressions for properties
+A field is a name bit of state stored directly in an instance, WHILE a property is are things that can be gotten from a get expression
+All fields => properties
+
+This means that unlike java, we add properties and methods to the class instance at any time, like Kotlin's Extension functions.
+E.g
+
+class Vehicle {};
+var car = Vehicle();
+car.nb_seats = 10; // We add a property to the car instance
+
+. are getters
+() are function calls
+-- We can store functions in a variables and call them later Ex.
+    {
+        var m = object.method;
+        m(arg1, ..., argn);
+    }
+    -- Also fields can store functions
+
+ Constructing an object is usually a pair of operations:
+ 1) Allocate memory for the fresh instance
+ 2) Initialize the object with user code
 
 
+The constructor of a class is the init(){} method which cannot return
+class Child < Parent {
+ ...
+}
 
+-- In dynamic type languages, inheritance simply means the child instances can call all methods which the parent can call.
+i.e when ever a method is called on the child instance, if the child never declared such method, we can also check if the parent
+did so and in this case, we just call the parent implementation.
