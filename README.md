@@ -1,4 +1,4 @@
-## Crafting Interpreters in C - Lox 
+## Crafting Interpreters in Java - Lox 
 
 This project is my journey through the fantastic book
 
